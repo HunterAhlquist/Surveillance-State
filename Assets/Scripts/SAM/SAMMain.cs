@@ -78,25 +78,29 @@ public class SAMMain : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        //routines
-        switch (curDetectionLevel) {
-            case SAMState.Patrol:
-                navAgent.speed = 4;
-                PatrolLoop();
-                //detection loop
-                break;
-            case SAMState.Investigate:
-                navAgent.speed = 5;
+        if (isActive) {
+            //routines
+            switch (curDetectionLevel) {
+                case SAMState.Patrol:
+                    navAgent.speed = 4;
+                    PatrolLoop();
+                    //detection loop
+                    break;
+                case SAMState.Investigate:
+                    navAgent.speed = 5;
                 
-                break;
-            case SAMState.Search:
-                navAgent.speed = 3;
+                    break;
+                case SAMState.Search:
+                    navAgent.speed = 3;
                 
-                break;
-            case SAMState.Alert:
-                navAgent.speed = 7;
-                break;
+                    break;
+                case SAMState.Alert:
+                    navAgent.speed = 7;
+                    break;
+            }
         }
+        
+        
     }
     
     //methods
@@ -104,7 +108,7 @@ public class SAMMain : MonoBehaviour
         switch (accessLevel) {
             case 0: //access only to points 0 and 1
                 curPatrolPoint = patrolPoints[patrolPointIndex].position;
-                Debug.Log(CheckDistanceBetweenPoints(transform.position, curPatrolPoint));
+                //Debug.Log(CheckDistanceBetweenPoints(transform.position, curPatrolPoint));
                 if (CheckDistanceBetweenPoints(transform.position, curPatrolPoint) > 0.5) {
                     navAgent.SetDestination(curPatrolPoint);
                 } else {
@@ -154,8 +158,8 @@ public class SAMMain : MonoBehaviour
                         curPatrolWaitTime += Time.deltaTime;
                     }
                     else {
-                        if (patrolPointIndex + 1 > 1) {
-                            patrolPointIndex = 0;
+                        if (patrolPointIndex + 1 > 7) {
+                            patrolPointIndex = 4;
                         }
                         else {
                             patrolPointIndex++;
@@ -175,8 +179,8 @@ public class SAMMain : MonoBehaviour
                         curPatrolWaitTime += Time.deltaTime;
                     }
                     else {
-                        if (patrolPointIndex + 1 > 1) {
-                            patrolPointIndex = 0;
+                        if (patrolPointIndex + 1 > 9) {
+                            patrolPointIndex = 8;
                         }
                         else {
                             patrolPointIndex++;
