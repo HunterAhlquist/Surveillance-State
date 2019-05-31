@@ -32,6 +32,7 @@ public class PlayerInput : MonoBehaviour {
             mv_leftRight = Input.GetAxis("Left Right");
             ///buttons
             act_run = Input.GetButton("Run");
+
             if (Application.isFocused) {
                 use = Input.GetAxis("Use");
             }
@@ -62,9 +63,7 @@ public class PlayerInput : MonoBehaviour {
             Cursor.visible = true;
         }
 
-        if (playerMain.curGameState != PlayerMain.GameState.Transition) {
-            InputUpdate();
-        }
+        InputUpdate();
 
     }
 }

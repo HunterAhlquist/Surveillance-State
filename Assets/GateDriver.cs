@@ -22,6 +22,14 @@ public class GateDriver : MonoBehaviour {
     void FixedUpdate()
     {
         if (button.activate) {
+            if (curGateTime > 0) {
+                if (!aud.isPlaying) {
+                    aud.Play();
+                }
+            } else {
+                aud.Stop();
+            }
+                
             transform.localPosition = new Vector3(transform.localPosition.x, 
                                                 Mathf.Lerp(targetLift, 0, Remap(curGateTime, 0, gateTime, 0, 1)), 
                                                     transform.localPosition.z);

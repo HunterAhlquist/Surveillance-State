@@ -29,7 +29,7 @@ public class SAM_ArmGunDriver : MonoBehaviour {
         if (curShotDelay > 0) {
             curShotDelay -= Time.deltaTime;
         } else {
-            playerMain.stamina -= 100 / 3;
+            playerMain.stamina -= 100 / 2;
             curShotDelay = shotDelay;
         }
     }

@@ -9,6 +9,7 @@ public class PlayerMain : MonoBehaviour {
     [Header("Player States")] 
     [Range(0,100)]
     public float stamina = 100;
+    public bool gameOver;
     [Space]
     public bool onGround;
     public bool inAir;
@@ -17,7 +18,9 @@ public class PlayerMain : MonoBehaviour {
     public bool running;
     public bool crouching;
     public bool crouched;
-    
+
+    public GameObject pauseUI;
+
     //Movement component
     public PlayerMovement movement;
 
@@ -38,13 +41,32 @@ public class PlayerMain : MonoBehaviour {
 
     public GameState curGameState;
 
-
     private void Update() {
         switch (curGameState) {
             case GameState.Gameplay:
+                pauseUI.SetActive(false);
                 ui.UpdateStaminaBars(stamina);
+                if (input.UI_pause) {
+                    curGameState = GameState.Pause;
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                    Time.timeScale = 0;
+                    
+                }
                 break;
             case GameState.Pause:
+                pauseUI.SetActive(true);
+                if (input.UI_pause) {
+                    curGameState = GameState.Gameplay;
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                    Time.timeScale = 1;
+                }
+
+                if (input.UI_Map) {
+                    Debug.Log("quit game");
+                    Application.Quit();
+                }
                 break;
             case GameState.Map:
                 break;

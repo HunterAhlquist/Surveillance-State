@@ -84,9 +84,6 @@ public class Entity : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider hit) {
-        Debug.Log("fuck");
-        
-        
         if (hit.gameObject.layer == 10) {//if the object hits another entity on the entity layer
             if (hit.GetComponent<Entity>().thrown) {
                 activate = true;
@@ -96,12 +93,11 @@ public class Entity : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision other) {
-        if (samMain.hadIntro) {
-            if (other.gameObject.layer == 9 || other.gameObject.layer == 14) {
-                if (thisEntityRigidbody.velocity.magnitude > 2) {
-                    objSounds.Play();
+        if (other.gameObject.layer == 9 || other.gameObject.layer == 14) {
+            if (thisEntityRigidbody.velocity.magnitude > 2) {
+                objSounds.Play();
+                if (samMain.hadIntro)
                     samMain.HeardNoise(gameObject);
-                }
             }
         }
     }

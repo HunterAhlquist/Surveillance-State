@@ -244,7 +244,7 @@ public class SAMMain : MonoBehaviour
                 break;
             case 2:
                 curPatrolPoint = patrolPoints[patrolPointIndex].position;
-                Debug.Log(CheckDistanceBetweenPoints(transform.position, curPatrolPoint));
+                //Debug.Log(CheckDistanceBetweenPoints(transform.position, curPatrolPoint));
                 if (CheckDistanceBetweenPoints(transform.position, curPatrolPoint) > 0.5) {
                     navAgent.SetDestination(curPatrolPoint);
                 } else {
