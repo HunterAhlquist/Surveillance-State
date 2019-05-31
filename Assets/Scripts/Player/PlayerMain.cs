@@ -42,7 +42,13 @@ public class PlayerMain : MonoBehaviour {
 
     public GameState curGameState;
 
+    public Transform respawn;
+
     private void Update() {
+        if (transform.position.y < -20) {
+            transform.position = respawn.position;
+        }
+
         if (stamina <= 0) {
             gameOver = true;
             SceneManager.LoadScene("lose", LoadSceneMode.Single);

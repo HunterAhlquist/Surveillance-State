@@ -33,6 +33,7 @@ public class SAMMain : MonoBehaviour
     public bool isActive;
 
     public byte patrolPointIndex;
+    public byte prevAccessLevel;
     //time stuff
     public float patrolWaitTime;
     private float curPatrolWaitTime;
@@ -94,7 +95,7 @@ public class SAMMain : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        if (patrolPointIndex == 2 && !hadIntro) {
+        if (patrolPointIndex == 3 && !hadIntro) {
             hadIntro = true;
         }
         
@@ -201,10 +202,13 @@ public class SAMMain : MonoBehaviour
     private void PatrolLoop() {
         switch (accessLevel) {
             case 0: //access only to points 0 and 1
+                if (prevAccessLevel != accessLevel && hadIntro) {
+                    prevAccessLevel = accessLevel;
+                    patrolPointIndex = 1;
+                }
                 curPatrolPoint = patrolPoints[patrolPointIndex].position;
-                //Debug.Log(CheckDistanceBetweenPoints(transform.position, curPatrolPoint));
                 if (CheckDistanceBetweenPoints(transform.position, curPatrolPoint) > 0.5) {
-                    navAgent.SetDestination(curPatrolPoint);
+
                 } else {
                     if (patrolWaitTime > curPatrolWaitTime) {
                         curPatrolWaitTime += Time.deltaTime;
@@ -222,8 +226,12 @@ public class SAMMain : MonoBehaviour
                 }
                 break;
             case 1:
+                if (prevAccessLevel != accessLevel && hadIntro) {
+                    prevAccessLevel = accessLevel;
+                    patrolPointIndex = 1;
+                }
                 curPatrolPoint = patrolPoints[patrolPointIndex].position;
-                Debug.Log(CheckDistanceBetweenPoints(transform.position, curPatrolPoint));
+
                 if (CheckDistanceBetweenPoints(transform.position, curPatrolPoint) > 0.5) {
                     navAgent.SetDestination(curPatrolPoint);
                 } else {
@@ -264,8 +272,11 @@ public class SAMMain : MonoBehaviour
                 }
                 break;
             case 3:
+                if (prevAccessLevel != accessLevel && hadIntro) {
+                    prevAccessLevel = accessLevel;
+                    patrolPointIndex = 8;
+                }
                 curPatrolPoint = patrolPoints[patrolPointIndex].position;
-                Debug.Log(CheckDistanceBetweenPoints(transform.position, curPatrolPoint));
                 if (CheckDistanceBetweenPoints(transform.position, curPatrolPoint) > 0.5) {
                     navAgent.SetDestination(curPatrolPoint);
                 } else {
