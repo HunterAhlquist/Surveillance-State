@@ -62,7 +62,7 @@ public class PlayerInteraction : MonoBehaviour {
             RaycastHit hit;
             int hitMask = LayerMask.GetMask("Entity");
             Ray raycast = new Ray(playerMain.view.camera.transform.position, playerMain.view.camera.forward);
-            if (Physics.Raycast(raycast, out hit, 1.5f, hitMask, QueryTriggerInteraction.Ignore)) {//cast a ray for anything on the entity layer
+            if (Physics.Raycast(raycast, out hit, 2, hitMask)) {//cast a ray for anything on the entity layer
                 switch (hit.collider.GetComponent<Entity>().thisEntityType) {//check what kind of entity
                     case Entity.EntityType.Pickup:
                         //(insert method to change crosshair to the pickup graphic

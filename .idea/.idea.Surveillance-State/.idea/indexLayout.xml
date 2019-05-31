@@ -9,13 +9,14 @@
       <Path>Library/PackageCache/com.unity.render-pipelines.core@5.7.2</Path>
       <Path>Library/PackageCache/com.unity.render-pipelines.lightweight@5.7.2</Path>
       <Path>Library/PackageCache/com.unity.shadergraph@5.7.2</Path>
-      <Path>Library/PackageCache/com.unity.textmeshpro@2.0.0</Path>
+      <Path>Library/PackageCache/com.unity.textmeshpro@2.0.1</Path>
       <Path>Packages</Path>
       <Path>ProjectSettings</Path>
     </explicitIncludes>
     <explicitExcludes>
       <Path>.git</Path>
       <Path>.idea</Path>
+      <Path>Ableton</Path>
       <Path>Builds</Path>
       <Path>Exclude</Path>
       <Path>Library</Path>

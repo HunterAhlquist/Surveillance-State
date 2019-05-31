@@ -17,6 +17,10 @@ public class SAM_CameraDriver : MonoBehaviour {
     public float viewDistance;
     public float rotSpeed;
     public bool inRange;
+
+
+    public SAMMain SamMain;
+    public SAM_CameraArray CameraArray;
     
     // Start is called before the first frame update
     void Start() {
@@ -25,38 +29,50 @@ public class SAM_CameraDriver : MonoBehaviour {
         } else if (transform.Find("ArmCamera")) {
             cameraRot = transform.Find("ArmCamera");
         }
-        if (!isArmCamera)
+
+        if (!isArmCamera) {
             initialCameraForward = cameraRot.forward;
+        }
+        
+        CameraArray = GameObject.Find("Sam").transform.Find("Body").transform.Find("Cameras").GetComponent<SAM_CameraArray>();
+        SamMain = GameObject.Find("Sam").GetComponent<SAMMain>();
+        playerMain = GameObject.Find("Player").GetComponent<PlayerMain>();
+        playerCam = GameObject.Find("PlayerView");
+
     }
 
     // Update is called once per frame
     void Update() {
-        if (targetOfInterest != null && lookAtTarget) {
+        if (SamMain.isActive && SamMain.hadIntro)
             LookCheck();
-        }
         
     }
 
     private void LookCheck() {
+        if (!targetOfInterest) {
+            PlayerCheck();
+            return;
+        }
         Vector3 toTargetVector = targetOfInterest.transform.position - transform.position;
         if (inRange) {
             LookOverTime(toTargetVector, rotSpeed);
+            if (SamMain.curDetectionLevel != SAMMain.SAMState.Alert && targetOfInterest.name == "Player" && !isArmCamera)
+                SamMain.SawPlayer();
         } else {
             if (isArmCamera) {
                 LookOverTime(transform.parent.forward, rotSpeed * 2);
             }
             else {
-                LookOverTime(initialCameraForward, rotSpeed);
+                LookOverTime(transform.forward, rotSpeed);
             }
             
         }
         
         //Debug.Log(Vector3.Angle(transform.forward, toTargetVector));
         RaycastHit hit;
-        Debug.DrawRay(transform.position, toTargetVector, Color.green);
         if (Physics.Raycast(transform.position, toTargetVector, out hit, Mathf.Infinity, ~LayerMask.GetMask("SAM", "Player"))) {
-            Debug.DrawRay(transform.position, toTargetVector, Color.red);
             //Debug.Log(hit.collider.name + ", " + hit.collider.tag);
+            
                 if (Vector3.Angle(transform.forward, toTargetVector) < viewConeSize) {
                     if (toTargetVector.magnitude < viewDistance) {
                         inRange = true;
@@ -72,6 +88,21 @@ public class SAM_CameraDriver : MonoBehaviour {
         else {
             inRange = false;
         }
+
+        PlayerCheck();
+    }
+
+    public void PlayerCheck() {
+        Vector3 toTargetVector = playerMain.gameObject.transform.position - transform.position;
+        
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, toTargetVector, out hit, Mathf.Infinity, ~LayerMask.GetMask("SAM"))) {
+            if (hit.collider.tag == "Player") {
+                inRange = true;
+                targetOfInterest = playerMain.gameObject;
+            }
+        }
+
     }
     
     private void LookOverTime(Vector3 lookVector, float speed) {

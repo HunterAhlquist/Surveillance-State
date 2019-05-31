@@ -9,7 +9,7 @@ public class SAM_Footsteps : MonoBehaviour {
     private bool played;
     private void OnTriggerEnter(Collider other) {
         if (!played && other.gameObject.layer == 14) {
-            Debug.Log("Step! " + transform.name);
+            //Debug.Log("Step! " + transform.name);
             steps.Play();
             played = true;
         }

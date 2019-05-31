@@ -12,7 +12,9 @@
           <e p="NavMeshModifierVolumeEditor.cs" t="Include" />
           <e p="NavMeshSurfaceEditor.cs" t="Include" />
         </e>
+        <e p="GateDriver.cs" t="Include" />
         <e p="SAM_Footsteps.cs" t="Include" />
+        <e p="SAM_Speakers.cs" t="Include" />
         <e p="Scripts" t="Include">
           <e p="Player" t="Include">
             <e p="CopyYRot.cs" t="Include" />

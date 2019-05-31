@@ -40,18 +40,18 @@ public class PlayerMovement : MonoBehaviour {
 
         if (playerMain.moving && playerMain.running) {
             if (playerMain.stamina > 5)
-                playerMain.stamina -= Time.deltaTime * 25;
+                playerMain.stamina -= Time.deltaTime * 20;
             if (playerMain.stamina < 5)
                 playerMain.stamina = 5;
         } else if (playerMain.moving) {
             if (playerMain.stamina < 100)
-                playerMain.stamina += Time.deltaTime * 20;
+                playerMain.stamina += Time.deltaTime * 10;
             if (playerMain.stamina > 100)
                 playerMain.stamina = 100;
         }
         else {
             if (playerMain.stamina < 100)
-                playerMain.stamina += Time.deltaTime * 35;
+                playerMain.stamina += Time.deltaTime * 16;
             if (playerMain.stamina > 100)
                 playerMain.stamina = 100;
         }

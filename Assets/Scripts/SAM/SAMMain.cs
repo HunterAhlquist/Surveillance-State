@@ -18,7 +18,13 @@ public class SAMMain : MonoBehaviour
     public CapsuleCollider bodyCol;
     
     public Transform[] patrolPoints; //up to four/3
+
+    public SAM_CameraArray cameraArray;
     
+    public Light detectionLight;
+
+    public GameObject player;
+
     [Header("SAM Status")]
     public SAMState curDetectionLevel;
 
@@ -31,6 +37,12 @@ public class SAMMain : MonoBehaviour
     public float patrolWaitTime;
     private float curPatrolWaitTime;
 
+    public bool hadIntro;
+    
+    //detection
+
+    public bool lostPlayer;
+    
     [Header("SAM Current Intel")] 
     public Vector3 lastKnownLocationOfPlayer;
 
@@ -43,7 +55,7 @@ public class SAMMain : MonoBehaviour
         SAMAnim = GetComponent<Animator>();
         bodyCol = GetComponent<CapsuleCollider>();
         navAgent = GetComponent<NavMeshAgent>();
-        
+        player = GameObject.Find("Player");
     }
 
     private void Update() {
@@ -66,41 +78,123 @@ public class SAMMain : MonoBehaviour
                     SAMAnim.SetBool("Walking", true);
                     break;
                 case SAMState.Search:
-                    SAMAnim.SetBool("Running", true);
-                    SAMAnim.SetBool("Walking", false);
+                    SAMAnim.SetBool("Running", false);
+                    SAMAnim.SetBool("Walking", true);
                     break;
             }
             
         } else {
             SAMAnim.SetBool("Walking", false);
             SAMAnim.SetBool("Running", false);
+            if (curDetectionLevel == SAMState.Alert) {
+                Vector3 toTargetVector = player.transform.position - transform.position;
+                LookOverTime(toTargetVector,  1);
+            }
         }
     }
 
     private void FixedUpdate() {
+        if (patrolPointIndex == 2 && !hadIntro) {
+            hadIntro = true;
+        }
+        
         if (isActive) {
             //routines
             switch (curDetectionLevel) {
                 case SAMState.Patrol:
-                    navAgent.speed = 4;
+                    navAgent.speed = 3;
+                    detectionLight.color = Color.blue;
                     PatrolLoop();
                     //detection loop
                     break;
                 case SAMState.Investigate:
-                    navAgent.speed = 5;
-                
+                    navAgent.speed = 4;
+                    detectionLight.color = Color.yellow;
+                    InvestigateLoop();
                     break;
                 case SAMState.Search:
                     navAgent.speed = 3;
-                
+                    //PatrolLoop();
                     break;
                 case SAMState.Alert:
-                    navAgent.speed = 7;
+                    navAgent.speed = 5;
+                    detectionLight.color = Color.red;
+                    AlertLoop();
                     break;
+            }
+        }
+        else {
+            if (accessLevel >= 2) {
+                isActive = true;
             }
         }
         
         
+    }
+    
+    private void LookOverTime(Vector3 lookVector, float speed) {
+        Quaternion rot = Quaternion.LookRotation(lookVector);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rot, speed * Time.deltaTime);
+    }
+    
+    private void AlertLoop() {
+        if (cameraArray.pointOfInterest.name == "Player") {
+            if (cameraArray.GetInRangeAll()) {
+                lastKnownLocationOfPlayer = player.transform.position;
+                pointOfInterest = lastKnownLocationOfPlayer;
+                if ((transform.position - pointOfInterest).magnitude > 10) {
+                    navAgent.SetDestination(lastKnownLocationOfPlayer);
+                }
+            }
+            else {
+                curDetectionLevel = SAMState.Investigate;
+            }
+            
+
+        } else {
+            if ((transform.position - pointOfInterest).magnitude > 4) {
+                navAgent.SetDestination(lastKnownLocationOfPlayer);
+            } else {
+                navAgent.SetDestination(transform.position);
+
+                if (patrolWaitTime * 2 > curPatrolWaitTime) {
+                    curPatrolWaitTime += Time.deltaTime;
+                }
+                else {
+                    PatrolEntry();
+                }
+            }
+        }
+    }
+
+    public void InvestigateLoop() {
+        if ((transform.position - pointOfInterest).magnitude > 4 && navAgent.velocity.magnitude > 0) {
+            navAgent.SetDestination(pointOfInterest);
+        }
+        else {
+            navAgent.SetDestination(transform.position);
+
+            if (patrolWaitTime * 1.5f > curPatrolWaitTime) {
+                curPatrolWaitTime += Time.deltaTime;
+            }
+            else {
+                PatrolEntry();
+            }
+        }
+    }
+
+    public void HeardNoise(GameObject sourceOfNoise) {
+        if (!hadIntro || curDetectionLevel == SAMState.Alert || CheckDistanceBetweenPoints(transform.position, sourceOfNoise.transform.position) > 20)
+            return;
+        curDetectionLevel = SAMState.Investigate;
+        pointOfInterest = sourceOfNoise.transform.position;
+        cameraArray.ChangeInterest(sourceOfNoise);
+        curPatrolWaitTime = 0;
+    }
+    
+    public void SawPlayer() {
+        curDetectionLevel = SAMState.Alert;
+        cameraArray.ChangeInterest(player);
     }
     
     //methods
@@ -191,10 +285,12 @@ public class SAMMain : MonoBehaviour
                 }
                 break;
         }
+        //detection code call
     }
 
     private void PatrolEntry() {
         curDetectionLevel = SAMState.Patrol;
+        //cameraArray.ChangeInterest(player);
     }
     
     private float CheckDistanceBetweenPoints(Vector3 origin, Vector3 target) {
