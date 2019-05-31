@@ -7,7 +7,7 @@ public class WinZone : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other) {
         if (other.tag == "Player") {
-            SceneManager.LoadScene("Win", LoadSceneMode.Single);
+            SceneManager.LoadScene("win", LoadSceneMode.Single);
         }
     }
 }

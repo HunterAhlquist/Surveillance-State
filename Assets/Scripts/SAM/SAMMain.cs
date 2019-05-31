@@ -88,7 +88,7 @@ public class SAMMain : MonoBehaviour
             SAMAnim.SetBool("Running", false);
             if (curDetectionLevel == SAMState.Alert) {
                 Vector3 toTargetVector = player.transform.position - transform.position;
-                LookOverTime(toTargetVector,  1);
+                LookOverTime(toTargetVector,  3);
             }
         }
     }

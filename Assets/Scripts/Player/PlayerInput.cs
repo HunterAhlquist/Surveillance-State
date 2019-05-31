@@ -53,14 +53,16 @@ public class PlayerInput : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         //mouse
-        if (playerMain.curGameState == PlayerMain.GameState.Gameplay || playerMain.curGameState == PlayerMain.GameState.Transition) {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        } else if (playerMain.curGameState == PlayerMain.GameState.Map){
+        if (playerMain != null) {
+            if (playerMain.curGameState == PlayerMain.GameState.Gameplay || playerMain.curGameState == PlayerMain.GameState.Transition) {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            } else if (playerMain.curGameState == PlayerMain.GameState.Map) {
 
-        } else {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            } else {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
         }
 
         InputUpdate();

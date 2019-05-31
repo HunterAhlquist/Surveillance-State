@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.SceneManagement;
 
 public class PlayerMain : MonoBehaviour {
     [FormerlySerializedAs("stamima")]
@@ -42,6 +43,10 @@ public class PlayerMain : MonoBehaviour {
     public GameState curGameState;
 
     private void Update() {
+        if (stamina <= 0) {
+            gameOver = true;
+            SceneManager.LoadScene("lose", LoadSceneMode.Single);
+        }
         switch (curGameState) {
             case GameState.Gameplay:
                 pauseUI.SetActive(false);
