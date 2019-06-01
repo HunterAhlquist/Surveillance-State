@@ -12,7 +12,9 @@
           <e p="NavMeshModifierVolumeEditor.cs" t="Include" />
           <e p="NavMeshSurfaceEditor.cs" t="Include" />
         </e>
+        <e p="GameOver.cs" t="Include" />
         <e p="GateDriver.cs" t="Include" />
+        <e p="MusicManager.cs" t="Include" />
         <e p="SAM_Footsteps.cs" t="Include" />
         <e p="SAM_Speakers.cs" t="Include" />
         <e p="Scripts" t="Include">
@@ -78,6 +80,7 @@
           </e>
         </e>
         <e p="TVAnimator.cs" t="Include" />
+        <e p="WinZone.cs" t="Include" />
       </e>
       <e p="obj" t="ExcludeRecursive" />
       <e p="Packages" t="ExcludeRecursive" />

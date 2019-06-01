@@ -284,7 +284,7 @@ public class SAMMain : MonoBehaviour
                         curPatrolWaitTime += Time.deltaTime;
                     }
                     else {
-                        if (patrolPointIndex + 1 > 9) {
+                        if (patrolPointIndex + 1 > 8) {
                             patrolPointIndex = 8;
                         }
                         else {
