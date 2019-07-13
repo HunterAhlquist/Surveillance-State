@@ -143,6 +143,13 @@ public class PlayerMovement : MonoBehaviour {
             }
         }
     }
+
+    public void PlayerLean() { 
+        //find the middle of the player collider
+        Vector3 midPoint = transform.position + new Vector3(0, collider.size.y / 2, 0);
+
+        //move along the
+    }
     
     private bool IsGrounded() {
         RaycastHit hitInfo;

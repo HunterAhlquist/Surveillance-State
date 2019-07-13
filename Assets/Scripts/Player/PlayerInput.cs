@@ -10,6 +10,7 @@ public class PlayerInput : MonoBehaviour {
     [Header("Input Variables")]
     public float mv_forwardBack;
     public float mv_leftRight;
+    public float lean;
 
     //world actions
     public bool act_run;
@@ -43,6 +44,8 @@ public class PlayerInput : MonoBehaviour {
             } else if (Input.GetButtonDown("Crouch") && playerMain.crouching) {
                 playerMain.crouching = false;
             }
+
+            lean = Input.GetAxis("Lean");
 
         } else {//gamepad
 
